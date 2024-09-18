@@ -27,6 +27,12 @@ SOFTWARE.
 #include <string>
 #include <wtypes.h>
 
+/**
+ * @brief Converts the given parameter to string literal.
+ * 
+ * @param var The parameter to stringify.
+ * @return The string literal of the given parameter.
+*/
 #define VAR_NAME(var) (#var)
 
 namespace GP4MemLib {
