@@ -24,12 +24,28 @@ SOFTWARE.
 
 #pragma once
 
+/**
+ * @def GP4MEMLIB_API
+ * @brief API visibility specifier for GP4MEMLIB.
+ * This macro is used to control symbol visibility when compiling as
+ * a static or dynamic library.
+ */
+#ifdef GP4MEMLIB_STATIC
+#define GP4MEMLIB_API 
+#else
+#ifdef GP4MEMLIB_EXPORTS
+#define GP4MEMLIB_API __declspec(dllexport)
+#else
+#define GP4MEMLIB_API  __declspec(dllimport)
+#endif
+#endif
+
 #include <string>
 #include <wtypes.h>
 
 /**
  * @brief Converts the given parameter to string literal.
- * 
+ *
  * @param var The parameter to stringify.
  * @return The string literal of the given parameter.
 */
@@ -42,7 +58,7 @@ namespace GP4MemLib {
 	 * @brief Utility class for memory operations, including converting addresses to strings,
 	 * patching memory, and rerouting functions.
 	 */
-	class MemUtils {
+	class GP4MEMLIB_API MemUtils {
 	public:
 		/**
 		 * @brief Converts a DWORD memory address to its string representation in hexadecimal.
@@ -84,7 +100,7 @@ namespace GP4MemLib {
 	 * @class RegUtils
 	 * @brief Utility class for saving and restoring volatile CPU registers (EAX, ECX, EDX).
 	 */
-	class RegUtils {
+	class GP4MEMLIB_API RegUtils {
 	public:
 
 		/**
