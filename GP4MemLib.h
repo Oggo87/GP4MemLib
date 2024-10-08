@@ -94,6 +94,18 @@ namespace GP4MemLib {
 		 */
 		static void rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName = "");
 
+		/**
+		 * @brief Converts any given value of type T to a byte pointer (LPBYTE).
+		 *
+		 * @tparam T The type of the input parameter.
+		 * @param value The value to convert.
+		 * @return A pointer to the byte representation of the value.
+		 */
+		template <typename T>
+		static LPBYTE toBytes(const T& value) {
+			return (LPBYTE)reinterpret_cast<const byte *>(std::addressof(value));
+		}
+
 	};
 
 	/**
