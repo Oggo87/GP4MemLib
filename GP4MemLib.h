@@ -105,6 +105,36 @@ namespace GP4MemLib {
 		static LPBYTE toBytes(const T& value) {
 			return (LPBYTE)reinterpret_cast<const byte *>(std::addressof(value));
 		}
+		
+		/**
+		 * @brief Converts a DWORD address to a pointer of type T.
+		 * 
+		 * This function takes a memory address in the form of a DWORD and converts it into a pointer
+		 * of the specified type T.
+		 * 
+		 * @tparam T The type of the pointer to be returned.
+		 * @param address The DWORD address to be converted.
+		 * @return A pointer of type T pointing to the memory location represented by the address.
+		 */
+		template <typename T>
+		static T* addressToPtr(DWORD address) {
+			return  reinterpret_cast<T*>(address);
+		}
+
+		/**
+		 * @brief Retrieves the value of type T at a given DWORD address.
+		 *
+		 * This function dereferences the memory address provided and returns the value stored
+		 * at that address as the specified type T.
+		 *
+		 * @tparam T The type of the value to be returned.
+		 * @param address The DWORD address where the value is stored.
+		 * @return The value of type T located at the memory address.
+		 */
+		template <typename T>
+		static T addressToValue(DWORD address) {
+			return  *reinterpret_cast<T*>(address);
+		}
 
 	};
 
