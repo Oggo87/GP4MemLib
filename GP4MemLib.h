@@ -82,8 +82,9 @@ namespace GP4MemLib {
 		 * @param address The memory address to patch.
 		 * @param patch The byte sequence to write to the memory address.
 		 * @param size The size of the patch.
+		 * @param debugOutput Optional. Whether to output debug information.
 		 */
-		static void patchAddress(LPVOID address, LPBYTE patch, SIZE_T size);
+		static void patchAddress(LPVOID address, LPBYTE patch, SIZE_T size, bool debugOutput = true);
 
 		/**
 		 * @brief Redirects the execution flow to a target function by inserting a jump at the specified address.
@@ -91,8 +92,9 @@ namespace GP4MemLib {
 		 * @param jumpToAddress The address where the jump should occur.
 		 * @param targetFunction The address of the function to reroute to.
 		 * @param functionName Optional. The name of the function to reroute (used for debugging).
+		 * @param debugOutput Optional. Whether to output debug information.
 		 */
-		static void rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName = "");
+		static void rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName = "", bool debugOutput = true);
 
 		/**
 		 * @brief Converts any given value of type T to a byte pointer (LPBYTE).

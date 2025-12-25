@@ -45,7 +45,7 @@ namespace GP4MemLib {
 		return dwordToString(PtrToUlong(address));
 	}
 
-	void MemUtils::patchAddress(LPVOID address, LPBYTE patch, SIZE_T size) {
+	void MemUtils::patchAddress(LPVOID address, LPBYTE patch, SIZE_T size, bool debugOutput) {
 		DWORD oldProtect;
 
 		std::string addressString = ptrToString(address);
@@ -55,14 +55,16 @@ namespace GP4MemLib {
 			memcpy(address, patch, size);
 			VirtualProtect(address, size, oldProtect, &oldProtect);
 
-			OutputDebugStringA(("Memory patched successfully at address " + addressString + "\n").c_str());
+			if (debugOutput)
+				OutputDebugStringA(("Memory patched successfully at address " + addressString + "\n").c_str());
 		}
 		else {
-			OutputDebugStringA(("Error while patching address " + addressString + "\n").c_str());
+			if (debugOutput)
+				OutputDebugStringA(("Error while patching address " + addressString + "\n").c_str());
 		}
 	}
 
-	void MemUtils::rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName)
+	void MemUtils::rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName, bool debugOutput)
 	{
 		BYTE jmpCode[5] = { 0xe9, 0x0, 0x0, 0x0, 0x0 };
 
@@ -72,12 +74,14 @@ namespace GP4MemLib {
 		// Append the jump offset to the jmp asm instruction code
 		memcpy(&jmpCode[1], &jumpOffset, sizeof(DWORD));
 
-		OutputDebugStringA(("Rerouting starting at address " + dwordToString(jumpToAddress) + "\n").c_str());
+		if (debugOutput)
+			OutputDebugStringA(("Rerouting starting at address " + dwordToString(jumpToAddress) + "\n").c_str());
 
 		if (functionName == "")
 			functionName = "target function";
 
-		OutputDebugStringA(("Address of " + functionName + ": " + dwordToString(targetFunction) + "\n").c_str());
+		if (debugOutput)
+			OutputDebugStringA(("Address of " + functionName + ": " + dwordToString(targetFunction) + "\n").c_str());
 
 		// Patch memory to jump
 		patchAddress((LPVOID)jumpToAddress, (LPBYTE)&jmpCode, sizeof(jmpCode));
