@@ -89,12 +89,22 @@ namespace GP4MemLib {
 		/**
 		 * @brief Redirects the execution flow to a target function by inserting a jump at the specified address.
 		 *
-		 * @param jumpToAddress The address where the jump should occur.
+		 * @param jumpAtAddress The address where the jump should occur.
 		 * @param targetFunction The address of the function to reroute to.
 		 * @param functionName Optional. The name of the function to reroute (used for debugging).
 		 * @param debugOutput Optional. Whether to output debug information.
 		 */
-		static void rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName = "", bool debugOutput = true);
+		static void rerouteFunction(DWORD jumpAtAddress, DWORD targetFunction, std::string functionName = "", bool debugOutput = true);
+
+		/**
+		* @brief Injects a call to a target function at a specified address.
+		* 
+		* @param callAtAddress The address where the call instruction should be injected.
+		* @param targetFunction The address of the function to call.
+		* @param functionName Optional. The name of the function to call (used for debugging).
+		* @param debugOutput Optional. Whether to output debug information.
+		*/
+		static void injectFunctionCall(DWORD callAtAddress, DWORD targetFunction, std::string functionName = "", bool debugOutput = true);
 
 		/**
 		 * @brief Converts any given value of type T to a byte pointer (LPBYTE).

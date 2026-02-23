@@ -34,7 +34,7 @@ namespace GP4MemLib {
 		std::ostringstream outputString;
 
 		outputString.str(std::string());
-		outputString << "0x" << std::hex << std::setw(sizeof(DWORD) * 2) << std::setfill('0') << address;
+		outputString << "0x" << std::hex << std::setw(static_cast<std::streamsize>(sizeof(DWORD)) * 2) << std::setfill('0') << address;
 
 		return outputString.str();
 
@@ -64,18 +64,18 @@ namespace GP4MemLib {
 		}
 	}
 
-	void MemUtils::rerouteFunction(DWORD jumpToAddress, DWORD targetFunction, std::string functionName, bool debugOutput)
+	void MemUtils::rerouteFunction(DWORD jumpAtAddress, DWORD targetFunction, std::string functionName, bool debugOutput)
 	{
 		BYTE jmpCode[5] = { 0xe9, 0x0, 0x0, 0x0, 0x0 };
 
 		// Offset to jump into the re-routed function
-		DWORD jumpOffset = targetFunction - jumpToAddress - 5;
+		DWORD jumpOffset = targetFunction - jumpAtAddress - 5;
 
 		// Append the jump offset to the jmp asm instruction code
 		memcpy(&jmpCode[1], &jumpOffset, sizeof(DWORD));
 
 		if (debugOutput)
-			OutputDebugStringA(("Rerouting starting at address " + dwordToString(jumpToAddress) + "\n").c_str());
+			OutputDebugStringA(("Rerouting starting at address " + dwordToString(jumpAtAddress) + "\n").c_str());
 
 		if (functionName == "")
 			functionName = "target function";
@@ -84,7 +84,31 @@ namespace GP4MemLib {
 			OutputDebugStringA(("Address of " + functionName + ": " + dwordToString(targetFunction) + "\n").c_str());
 
 		// Patch memory to jump
-		patchAddress((LPVOID)jumpToAddress, (LPBYTE)&jmpCode, sizeof(jmpCode));
+		patchAddress((LPVOID)jumpAtAddress, (LPBYTE)&jmpCode, sizeof(jmpCode));
+
+	}
+
+	void MemUtils::injectFunctionCall(DWORD callAtAddress, DWORD targetFunction, std::string functionName, bool debugOutput)
+	{
+		BYTE callCode[5] = { 0xe8, 0x0, 0x0, 0x0, 0x0 };
+
+		// Offset to jump into the target function
+		DWORD callOffset = targetFunction - callAtAddress - 5;
+
+		// Append the call offset to the call asm instruction code
+		memcpy(&callCode[1], &callOffset, sizeof(DWORD));
+
+		if (debugOutput)
+			OutputDebugStringA(("Injecting call at address " + dwordToString(callAtAddress) + "\n").c_str());
+
+		if (functionName == "")
+			functionName = "target function";
+
+		if (debugOutput)
+			OutputDebugStringA(("Address of " + functionName + ": " + dwordToString(targetFunction) + "\n").c_str());
+
+		// Patch memory to inject the call
+		patchAddress((LPVOID)callAtAddress, (LPBYTE)&callCode, sizeof(callCode));
 
 	}
 
